@@ -1,0 +1,18 @@
+.chat-input {
+  background-color: $background-color;
+  border-radius: 3rem;
+  margin: .8rem 1rem;
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+
+  & span {
+    margin-right: 0.6rem;
+  }
+
+  &__input {
+    @include text-input_mixin;
+    flex: 1;
+    padding: 0.6rem 0;
+  }
+}

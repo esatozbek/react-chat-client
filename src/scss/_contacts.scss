@@ -1,0 +1,60 @@
+.contacts {
+  list-style: none;
+  height: 73.8vh;
+  overflow-y: scroll;
+  cursor: pointer;
+
+  &__item {
+      display: flex;
+      align-items: center;
+      padding: 1rem;
+      border-radius: 3px;
+      border-top: 1px solid $background-color-lighter;
+      transition: ease .4s;
+
+      &:hover {
+          background-color: darken($background-color-lighter, 25);
+      }
+
+      &--status {
+          display: inline-block;
+          height: .4rem;
+          width: .4rem;
+          background-color: $background-color-lighter;
+          border-radius: 50%;
+          margin-right: .8rem;
+
+          &.active {
+            background-color: $success;
+          }
+
+          &.busy {
+            background-color: $danger;
+          }
+
+          &.away {
+            background-color: $info;
+          }
+      }
+
+      &--info {
+          flex: 1;
+
+
+          .info-name {
+            font-weight: 300;
+          }
+
+          .info-status {
+              font-size: .7rem;
+              font-weight: 200;
+              letter-spacing: .4px;
+              color: $background-color-lighter
+          }
+      }
+
+      &--lastseen {
+          font-weight: 300;
+      }
+  }
+}

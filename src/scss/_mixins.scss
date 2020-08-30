@@ -1,0 +1,55 @@
+@mixin input_mixin {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  margin: 0;
+  padding: 0;
+  z-index: 100;
+
+  &:checked {
+    & + [class*="__icon"] {
+      opacity: 1;
+    }
+  }
+}
+
+@mixin text-input_mixin {
+  border: none;
+  width: 100%;
+  background-color: $background-color;
+  border-radius: 3px;
+  color: $white;
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  flex: 1;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+@mixin abs-vertical-center {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+@mixin button_mixin($variant) {
+  background-color: $variant;
+
+  &:hover {
+    background-color: darken($variant, 5);
+  }
+
+  &:active {
+    background-color: darken($variant, 10);
+    border-color: darken($variant, 15);
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 0.2rem rgba($variant, 0.4);
+  }
+}

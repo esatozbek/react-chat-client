@@ -1,0 +1,30 @@
+.contact-info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid $background-color-lighter;
+
+    &__info {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        flex-grow: 1;
+
+        &--name {
+
+        }
+    
+        &--status {
+            display: flex;
+            align-items: center;
+            font-size: .8rem;
+            font-weight: 300;
+        }
+    }
+
+
+    & img {
+        margin-right: .8rem;
+    }
+}
