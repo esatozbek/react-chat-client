@@ -11,8 +11,8 @@ const getListItems = () => {
 
 const ChatNotifications = (props) => {
   return (
-    <Card style={{ zIndex: 10, boxShadow: '7px 7px 10px 0px rgba(0,0,0,0.75)' }}>
-      <Card.Header style={{ padding: '.8rem' }}>
+    <Card style={{ zIndex: 15, boxShadow: '7px 7px 10px 0px rgba(0,0,0,0.75)', border: 'none' }}>
+      <Card.Header style={{ padding: '1.2rem', backgroundColor: '#0f0f1c' }}>
         <span className="notifications__title">Notifications</span>
         <span className="notifications__more">View All</span>
       </Card.Header>

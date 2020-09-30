@@ -26,6 +26,7 @@ const ChatBubble = ({ content, ...props }) => {
         target={showMoreRef}
         show={showMore}
         onHide={() => setShowMore(false)}
+        placement={props.me ? "left-start" : "right-start"}
       >
         <Dropdown.Item onClick={() => console.log("Copy")}>Copy</Dropdown.Item>
         <Dropdown.Item onClick={() => console.log("Save")}>Save</Dropdown.Item>
@@ -65,7 +66,8 @@ const getChatBubbles = () => {
         content="Curabitur ipsum erat, vestibulum a leo a, tristique venenatis neque. Integer laoreet elementum imperdiet. Nulla malesuada nunc eu blandit consectetur"
       />
     );
-    if (i % 2 === 0) items.push(<ChatTime key={"chattime" + i} content={"chattime " + i} />);
+    if (i % 2 === 0)
+      items.push(<ChatTime key={"chattime" + i} content={"chattime " + i} />);
     items.push(
       <ChatBubble
         key={"me" + i}
@@ -79,6 +81,7 @@ const getChatBubbles = () => {
 
 const ChatScreen = (props) => {
   const [showMore, setShowMore] = useState(false);
+  const [isSearchActive, setSearchActive] = useState(false);
   const showMoreRef = useRef(null);
 
   return (
@@ -98,7 +101,13 @@ const ChatScreen = (props) => {
             </div>
           </div>
           <div className="chat__header--buttons">
-            <span className="ti-search"></span>
+            <span className={`search ${isSearchActive ? "active" : ""}`}>
+              <span
+                className="ti-search"
+                onClick={(e) => setSearchActive(!isSearchActive)}
+              ></span>
+              <input className="chat-input__input" placeholder="Search..." />
+            </span>
             <span className="ti-settings"></span>
             <span
               className="ti-more"
@@ -109,6 +118,7 @@ const ChatScreen = (props) => {
               target={showMoreRef}
               show={showMore}
               onHide={() => setShowMore(false)}
+              placement="bottom-start"
             >
               <Dropdown.Item onClick={() => console.log("Copy")}>
                 Copy

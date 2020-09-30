@@ -19,20 +19,46 @@
     }
 
     &--buttons {
-      & span {
+      & [class^="ti"] {
         display: inline-block;
-        background-color: $header-color;
+        background-color: $header-color-dark;
         padding: 0.6rem;
         border-radius: 50%;
         margin-right: 0.6rem;
         cursor: pointer;
+      }
+
+      & .search {
+        display: inline-flex;
+        background-color: $header-color-dark;
+        border-radius: 2.2rem;
+        margin-right: 0.6rem;
+
+        & [class^="ti"] {
+          margin-right: 0;
+        }
+
+        & input {
+          width: 0;
+          height: 2.2rem;
+          border-radius: 2.2rem;
+          transition: 0.4s ease all;
+        }
+
+        &.active {
+          border-radius: 2rem;
+          & input {
+            width: 10rem;
+            padding: 0.6rem;
+          }
+        }
       }
     }
   }
 
   &__body {
     flex: 1 1 auto;
-    margin: .8rem;
+    margin: 0.8rem;
     display: flex;
     flex-direction: column;
     height: 0;
@@ -48,7 +74,7 @@
     }
 
     &--send {
-      @include button_mixin($header-color);
+      @include button_mixin($header-color-dark);
       display: inline-flex;
       border: none;
       padding: 0.6rem 1.2rem;
@@ -101,7 +127,7 @@
 
 .bubble {
   // background-color: $indigo-dark;
-  background-color: $background-color-lighter;
+  background-color: darken($background-color-lighter, 25);
   display: inline-block;
   width: max-content;
   max-width: 14rem;
@@ -111,6 +137,8 @@
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
   border-bottom-right-radius: 6px;
+  box-shadow: 5px 5px 27px -1px rgba(0, 0, 0, 0.75);
+  user-select: none;
 
   &.me {
     align-self: flex-end;
@@ -123,7 +151,7 @@
         right: 0;
       }
 
-      & [class^='ti'] {
+      & [class^="ti"] {
         position: initial !important;
       }
     }
@@ -135,35 +163,40 @@
 
       & span {
         margin-right: 0;
-        margin-left: .3rem;
+        margin-left: 0.3rem;
       }
     }
   }
 
   &__header {
     position: relative;
-    margin-bottom: .6rem;
+    margin-bottom: 0.6rem;
 
     &--name {
       color: $header-color;
-      font-size: .9rem;
+      font-size: 0.9rem;
     }
 
-    & [class^='ti'] {
+    & [class^="ti"] {
       cursor: pointer;
       position: absolute;
       right: 0;
     }
   }
 
+  &__context {
+    color: darken(white, 5);
+    font-weight: 200;
+  }
+
   &__footer {
     font-weight: 200;
-    font-size: .7rem;
+    font-size: 0.7rem;
     color: $text-info;
-    margin-top: .6rem;
+    margin-top: 0.6rem;
 
     & span {
-      margin-right: .3rem;
+      margin-right: 0.3rem;
     }
   }
 }

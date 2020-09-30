@@ -1,0 +1,26 @@
+.login {
+    background-color: rgba($background-color-light, .8);
+    width: 35vw;
+    padding: 4rem;
+    border-radius: 5px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    &__button {
+        margin: .4rem 0;
+        align-self: flex-end;
+    }
+
+    &__box {
+        display: flex;
+        flex-direction: column;
+        align-content: flex-end;
+    }
+
+    & hr {
+        margin: .4rem 0;
+        border-top: .1rem solid $indigo-dark;
+    }
+}
