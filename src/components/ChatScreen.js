@@ -1,7 +1,11 @@
 import React, { useState, useRef } from "react";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
 import Avatar from "ui-library/Avatar";
 import Dropdown from "ui-library/Dropdown";
+import { logout } from "../store/actions/userActions";
+import { getMessages } from "../store/actions/messageActions";
+import { useEffect } from "react";
 
 const ChatBubble = ({ content, ...props }) => {
   const [showMore, setShowMore] = useState(false);
@@ -57,32 +61,50 @@ const ChatTime = (props) => {
   );
 };
 
-const getChatBubbles = () => {
+const getChatBubbles = (messages, user) => {
   const items = [];
-  for (let i = 0; i < 5; i++) {
+  // for (let i = 0; i < 5; i++) {
+  //   items.push(
+  //     <ChatBubble
+  //       key={i}
+  //       content="Curabitur ipsum erat, vestibulum a leo a, tristique venenatis neque. Integer laoreet elementum imperdiet. Nulla malesuada nunc eu blandit consectetur"
+  //     />
+  //   );
+  //   if (i % 2 === 0)
+  //     items.push(<ChatTime key={"chattime" + i} content={"chattime " + i} />);
+  //   items.push(
+  //     <ChatBubble
+  //       key={"me" + i}
+  //       content="Curabitur ipsum erat, vestibulum a leo a, tristique venenatis neque. Integer laoreet elementum imperdiet. Nulla malesuada nunc eu blandit consectetur"
+  //       me
+  //     />
+  //   );
+  // }
+
+  messages.forEach((item) => {
     items.push(
       <ChatBubble
-        key={i}
-        content="Curabitur ipsum erat, vestibulum a leo a, tristique venenatis neque. Integer laoreet elementum imperdiet. Nulla malesuada nunc eu blandit consectetur"
+        key={"message" + item.id}
+        content={item.content}
+        me={item.sender.id === user.id}
       />
     );
-    if (i % 2 === 0)
-      items.push(<ChatTime key={"chattime" + i} content={"chattime " + i} />);
-    items.push(
-      <ChatBubble
-        key={"me" + i}
-        content="Curabitur ipsum erat, vestibulum a leo a, tristique venenatis neque. Integer laoreet elementum imperdiet. Nulla malesuada nunc eu blandit consectetur"
-        me
-      />
-    );
-  }
+  });
   return items;
 };
 
-const ChatScreen = (props) => {
+const ChatScreen = ({ logout, messages, user, getMessages }) => {
   const [showMore, setShowMore] = useState(false);
   const [isSearchActive, setSearchActive] = useState(false);
   const showMoreRef = useRef(null);
+
+  useEffect(() => {
+    getMessages();
+  }, []);
+
+  const logoutUser = () => {
+    logout();
+  };
 
   return (
     <div className="chat">
@@ -129,8 +151,8 @@ const ChatScreen = (props) => {
               <Dropdown.Item onClick={() => console.log("Forward")}>
                 Forward
               </Dropdown.Item>
-              <Dropdown.Item onClick={() => console.log("Delete")}>
-                Delete
+              <Dropdown.Item onClick={(e) => logoutUser()}>
+                Logout
               </Dropdown.Item>
             </Dropdown>
           </div>
@@ -140,7 +162,7 @@ const ChatScreen = (props) => {
         {<ChatTime content="Today" />}
         {<ChatBubble content="How are you?" />}
         {<ChatBubble content="Curabitur ipsum erat, vestibulum a leo a." me />}
-        {getChatBubbles()}
+        {getChatBubbles(messages, user)}
       </div>
       <div className="chat__footer">
         <div className="chat__footer--input">
@@ -159,4 +181,11 @@ const ChatScreen = (props) => {
   );
 };
 
-export default ChatScreen;
+function mapStateToProps(state) {
+  return {
+    user: state.userReducer.user,
+    messages: state.messageReducer.messages,
+  };
+}
+
+export default connect(mapStateToProps, { logout, getMessages })(ChatScreen);

@@ -1,5 +1,9 @@
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
+export const LOGOUT = "LOGOUT";
 
 export const USERS_SUCCESS = "USERS_SUCCESS";
 export const GROUPS_SUCCESS = "GROUPS_SUCCESS";
 export const MESSAGES_SUCCESS = "MESSAGES_SUCCESS";
+
+export const CONTACTS_SUCCESS = "CONTACTS_SUCCESS";
+

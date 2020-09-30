@@ -4,7 +4,7 @@ const defaultState = {
   messages: [],
 };
 
-export function messagesReducer(state = defaultState, action) {
+export function messageReducer(state = defaultState, action) {
   switch (action.type) {
     case MESSAGES_SUCCESS:
       return {
@@ -16,4 +16,4 @@ export function messagesReducer(state = defaultState, action) {
   }
 }
 
-export default messagesReducer;
+export default messageReducer;

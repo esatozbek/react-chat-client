@@ -4,42 +4,40 @@ import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import Login from "../pages/Login";
 import ChatBox from "../pages/ChatBox";
 
-const PrivateRouteView = ({ component: Component, user, ...rest }) => {
-  const isLogin = () => {
-    return !!user.username;
-  }
-
+const PrivateRoute = ({ component: Component, isAllowed, redirectTo, ...rest }) => {
   return (
     <Route
       {...rest}
       render={(props) =>
-        isLogin() ? <Component {...props} /> : <Redirect to="/login" />
+        isAllowed ? <Component {...props} /> : <Redirect to={redirectTo} />
       }
     />
+  );
+};
+
+const PublicRoute = ({ component: Component, ...rest }) => {
+  return <Route {...rest} render={(props) => <Component {...props} />} />;
+};
+
+const Router = ({ user }) => {
+  const isLogin = () => {
+    return !!user.username;
+  };
+
+  return (
+    <BrowserRouter>
+      <Switch>
+        <PrivateRoute isAllowed={isLogin()} component={ChatBox} exact path="/" redirectTo="/login" />
+        <PrivateRoute isAllowed={!isLogin()} component={Login} path="/login" redirectTo="/" />
+      </Switch>
+    </BrowserRouter>
   );
 };
 
 const mapStateToProps = (state) => {
   return {
     user: state.userReducer.user,
-  }
-}
-
-const PrivateRoute =  connect(mapStateToProps)(PrivateRouteView);
-
-const PublicRoute = ({ component: Component, ...rest }) => {
-  return <Route {...rest} render={(props) => <Component {...props} />} />;
+  };
 };
 
-const Router = (props) => {
-  return (
-    <BrowserRouter>
-      <Switch>
-        <PrivateRoute component={ChatBox} exact path="/" />
-        <PublicRoute component={Login} path="/login" />
-      </Switch>
-    </BrowserRouter>
-  );
-};
-
-export default Router;
+export default connect(mapStateToProps)(Router);;

@@ -1,7 +1,17 @@
-import { LOGIN_SUCCESS } from "../actions/actionTypes";
+import LocalStorageService from "../../service/LocalStorageService";
+import { LOGIN_SUCCESS, LOGOUT } from "../actions/actionTypes";
+
+function getUserFromStorageOrDefault() {
+  let user = LocalStorageService.getItem("user");
+  if (user) {
+    user = JSON.parse(user);
+  }
+
+  return user || {};
+}
 
 const defaultState = {
-  user: {},
+  user: getUserFromStorageOrDefault(),
 };
 
 export function userReducer(state = defaultState, action) {
@@ -11,7 +21,13 @@ export function userReducer(state = defaultState, action) {
         ...state,
         user: action.payload,
       };
-    default: return state;
+    case LOGOUT:
+      return {
+        ...state,
+        user: {},
+      };
+    default:
+      return state;
   }
 }
 

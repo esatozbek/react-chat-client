@@ -3,14 +3,20 @@ import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 import TextInput from "ui-library/TextInput";
 import Button from "ui-library/Button";
+import LoadingButton from "ui-library/LoadingButton";
 import { login } from "../store/actions/userActions";
 
 const Login = (props) => {
   const history = useHistory();
   const [username, setUsername] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const loginUser = () => {
-    props.login(username).then(resp => history.push('/'));
+    setLoading(true);
+    props.login(username).then((resp) => {
+      setLoading(false);
+      history.push("/");
+    });
   };
 
   return (
@@ -27,9 +33,14 @@ const Login = (props) => {
           onChange={(e) => setUsername(e.target.value)}
           label="Existing user"
         />
-        <Button onClick={loginUser} className="login__button" variant="primary">
+        <LoadingButton
+          onClick={loginUser}
+          className="login__button"
+          variant="primary"
+          loading={loading}
+        >
           Login
-        </Button>
+        </LoadingButton>
       </div>
     </div>
   );
@@ -38,7 +49,7 @@ const Login = (props) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     login(username) {
-        return dispatch(login(username)).then(resp => console.log(resp));
+      return dispatch(login(username)).then((resp) => console.log(resp));
     },
   };
 };
