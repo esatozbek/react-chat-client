@@ -39,7 +39,7 @@ class ApiRequest {
       method: "PATCH",
       url: API_URL + path,
       responseType: "json",
-      data: payload,
+      data: JSON.stringify(payload),
     });
   }
 

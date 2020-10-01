@@ -3,24 +3,15 @@ import { connect } from "react-redux";
 import Tab from "ui-library/Tab";
 import Overlay from "ui-library/Overlay";
 import Avatar from "ui-library/Avatar";
-import ContactListItem from "../components/ContactListItem";
-import GroupListItem from "../components/GroupListItem";
-import ListItem from "../components/ListItem";
-import ChatNotifications from "../components/ChatNotifications";
+import ContactListItem from "./ContactListItem";
+import GroupListItem from "./GroupListItem";
+import ListItem from "./ListItem";
+import ChatNotifications from "../ChatNotifications";
 import {
-  getUsers,
   getGroups,
   getContacts,
-} from "../store/actions/contactActions";
-
-const contactListItems = (users) => {
-  const items = [];
-  console.log(users);
-  users.forEach((item) =>
-    items.push(<ContactListItem key={item.username} username={item.username} />)
-  );
-  return items;
-};
+  selectContact
+} from "../../store/actions/contactActions";
 
 const groupListItems = (groups) => {
   const items = [];
@@ -58,27 +49,33 @@ const listContacts = (contacts) => {
   // for (let i = 0; i < 5; i++) {
   //   items.push(<ListItem key={"list2" + i} />);
   // }
-  contacts.forEach(item => items.push(<ListItem key={`contact${item.id}`} name={item.username} />));
+  contacts.forEach((item) =>
+    items.push(<ListItem key={`contact${item.id}`} name={item.username} />)
+  );
   return items;
 };
 
 const ContactInfo = ({
   user,
-  getUsers,
-  getGroups,
-  users,
+  recentChatUsers,
   groups,
-  getContacts,
-  contacts
+  contacts,
+  selectContact
 }) => {
   const notificationRef = useRef(null);
   const [showNotifications, setShowNotifications] = useState(false);
 
   useEffect(() => {
-    getUsers();
-    getGroups();
-    getContacts();
+    // getUsers();
+    // getGroups();
+    // getContacts();
   }, []);
+
+  const getRecentChats = () => {
+    return recentChatUsers.map((user) => (
+      <ContactListItem key={`user${user.id}`} username={user.username} onClick={() => selectContact(user)} />
+    ));
+  };
 
   return (
     <React.Fragment>
@@ -119,7 +116,7 @@ const ContactInfo = ({
           <div style={{ padding: ".8rem", fontWeight: "200" }}>
             Recent Chats
           </div>
-          <ul className="contacts">{contactListItems(users)}</ul>
+          <ul className="contacts">{getRecentChats()}</ul>
         </Tab>
         <Tab key="tab1" title="Group">
           <div style={{ padding: ".8rem", fontWeight: "200" }}>Groups</div>
@@ -143,12 +140,13 @@ const mapStateToProps = (state) => {
   console.log(state);
   return {
     user: state.userReducer.user,
-    users: state.contactReducer.users,
+    recentChatUsers: state.contactReducer.recentChatUsers,
     groups: state.contactReducer.groups,
-    contacts: state.contactReducer.contacts
+    contacts: state.contactReducer.contacts,
+    messages: state.messageReducer.messages,
   };
 };
 
-export default connect(mapStateToProps, { getUsers, getGroups, getContacts })(
+export default connect(mapStateToProps, { getGroups, getContacts, selectContact })(
   ContactInfo
 );

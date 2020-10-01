@@ -1,15 +1,15 @@
 import ApiRequest from "../../service/ApiRequestService";
-import { USERS_SUCCESS, GROUPS_SUCCESS, CONTACTS_SUCCESS } from "./actionTypes";
+import { RECENT_CHAT_USERS_REQUEST, GROUPS_SUCCESS, CONTACTS_SUCCESS, SELECT_CONTACT, SELECT_GROUP } from "./actionTypes";
 
 const USER_PREFIX = "/user";
 const GROUP_PREFIX = "/group";
 
-export function getUsers() {
+export function getRecentChatUsers() {
   return (dispatch) => {
-    return ApiRequest.get(`${USER_PREFIX}`).then((resp) => {
+    return ApiRequest.get(`${USER_PREFIX}/chats`).then((resp) => {
       console.log(resp);
       dispatch({
-        type: USERS_SUCCESS,
+        type: RECENT_CHAT_USERS_REQUEST,
         payload: resp.data,
       });
     });
@@ -36,4 +36,19 @@ export function getContacts(userId) {
       });
     });
   };
+}
+
+export function selectContact(user) {
+  console.log("selected contact " + user.id);
+  return {
+    type: SELECT_CONTACT,
+    payload: user,
+  }
+}
+
+export function selectGroup(group) {
+  return {
+    type: SELECT_GROUP,
+    payload: group,
+  }
 }

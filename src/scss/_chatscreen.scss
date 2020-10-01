@@ -26,6 +26,12 @@
         border-radius: 50%;
         margin-right: 0.6rem;
         cursor: pointer;
+        transition: .4s ease all;
+
+        &:hover {
+          background-color: lighten($header-color-dark, 25);
+          box-shadow: 5px 5px 27px -1px rgba($header-color-dark, 0.75);
+        }
       }
 
       & .search {
@@ -126,7 +132,6 @@
 }
 
 .bubble {
-  // background-color: $indigo-dark;
   background-color: darken($background-color-lighter, 25);
   display: inline-block;
   width: max-content;
@@ -139,6 +144,10 @@
   border-bottom-right-radius: 6px;
   box-shadow: 5px 5px 27px -1px rgba(0, 0, 0, 0.75);
   user-select: none;
+
+  &__time--status {
+    float: right;
+  }
 
   &.me {
     align-self: flex-end;
@@ -164,6 +173,11 @@
       & span {
         margin-right: 0;
         margin-left: 0.3rem;
+      }
+
+      & .bubble__time--status {
+        flex-grow: 1;
+        margin-left: 0;
       }
     }
   }

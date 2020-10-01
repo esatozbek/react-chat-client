@@ -1,9 +1,9 @@
 import React from "react";
 import Avatar from "ui-library/Avatar";
 
-const ContactListItem = (props) => {
+const ContactListItem = ({ ...props }) => {
   return (
-    <li className="contacts__item">
+    <li className="contacts__item" {...props}>
       <span className="contacts__item--status"></span>
       <Avatar
         src={process.env.PUBLIC_URL + "/avatar-girl.jpg"}
