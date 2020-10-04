@@ -1,24 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import Card from "ui-library/Card";
 import FlexContainer from "ui-library/FlexContainer";
-import ChatScreen from "../components/ChatScreen";
+import ChatScreen from "../components/ChatScreen/ChatScreen";
 import ContactInfo from '../components/ContactInfo/ContactInfo';
-import {
-  getRecentChatUsers,
-  getGroups,
-  getContacts,
-} from "../store/actions/contactActions";
-import { getMessages } from "../store/actions/messageActions";
 
-const ChatBox = ({ getRecentChatUsers, getGroups, getContacts}) => {
-  useEffect(() => {
-    getRecentChatUsers();
-    getGroups();
-    getContacts();
-    getMessages();
-  }, []);
-
+const ChatBox = (props) => {
   return (
     <FlexContainer>
       <Card style={{ flex: 1 }}>
@@ -41,4 +28,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { getRecentChatUsers, getGroups, getContacts })(ChatBox);
+export default connect(mapStateToProps)(ChatBox);

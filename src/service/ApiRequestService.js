@@ -5,17 +5,19 @@ const API_URL = "http://localhost:8080";
 
 class ApiRequest {
   constructor() {
+    let service = axios.create();
+    service.interceptors.response.use(this.handleSuccess, this.handleError);
+    this.service = service;
+  }
+
+  prepareHeaders() {
     const headers = {};
     const user = LocalStorageService.getItem("user");
     if (user) {
       const userId = JSON.parse(user).id;
       headers["x-user-id"] = userId;
     }
-    let service = axios.create({
-      headers
-    });
-    service.interceptors.response.use(this.handleSuccess, this.handleError);
-    this.service = service;
+    return headers;
   }
 
   handleSuccess(response) {
@@ -31,7 +33,11 @@ class ApiRequest {
   }
 
   get(path) {
-    return this.service.get(API_URL + path);
+    return this.service.request({
+      method: "GET",
+      url: API_URL + path,
+      headers: this.prepareHeaders(),
+    });
   }
 
   patch(path, payload) {
@@ -40,6 +46,7 @@ class ApiRequest {
       url: API_URL + path,
       responseType: "json",
       data: JSON.stringify(payload),
+      headers: this.prepareHeaders(),
     });
   }
 
@@ -49,6 +56,7 @@ class ApiRequest {
       url: API_URL + path,
       responseType: "json",
       data: payload,
+      headers: this.prepareHeaders(),
     });
   }
 }

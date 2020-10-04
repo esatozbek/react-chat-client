@@ -1,7 +1,15 @@
-import { GET_MESSAGE_REQUEST, CREATE_MESSAGE_REQUEST } from "../actions/actionTypes";
+import {
+  GET_MESSAGE_REQUEST,
+  CREATE_MESSAGE_REQUEST,
+  LOGOUT,
+  GET_MESSAGE_SUCCESS,
+  GET_MESSAGE_ERROR,
+} from "../actions/actionTypes";
 
 const defaultState = {
   messageMap: new Map(),
+  messagesLoading: false,
+  messagesError: false,
 };
 
 export function messageReducer(state = defaultState, action) {
@@ -9,12 +17,28 @@ export function messageReducer(state = defaultState, action) {
     case GET_MESSAGE_REQUEST:
       return {
         ...state,
-        messageMap: action.payload,
+        messagesLoading: true,
+        messagesError: false,
       };
-      case CREATE_MESSAGE_REQUEST:
+    case GET_MESSAGE_SUCCESS:
       return {
         ...state,
         messageMap: action.payload,
+      };
+    case GET_MESSAGE_ERROR:
+      return {
+        ...state,
+        messagesLoading: false,
+        messagesError: true,
+      };
+    case CREATE_MESSAGE_REQUEST:
+      return {
+        ...state,
+        messageMap: action.payload,
+      };
+    case LOGOUT:
+      return {
+        ...defaultState,
       };
     default:
       return state;

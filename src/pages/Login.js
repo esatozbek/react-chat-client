@@ -6,14 +6,15 @@ import Button from "ui-library/Button";
 import LoadingButton from "ui-library/LoadingButton";
 import { login } from "../store/actions/userActions";
 
-const Login = (props) => {
+const Login = ({ login, test }) => {
   const history = useHistory();
   const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(false);
 
   const loginUser = () => {
     setLoading(true);
-    props.login(username).then((resp) => {
+
+    login(username).then((resp) => {
       setLoading(false);
       history.push("/");
     });
@@ -46,12 +47,4 @@ const Login = (props) => {
   );
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
-  return {
-    login(username) {
-      return dispatch(login(username)).then((resp) => console.log(resp));
-    },
-  };
-};
-
-export default connect(null, mapDispatchToProps)(Login);
+export default connect(null, { login })(Login);
