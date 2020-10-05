@@ -5,7 +5,12 @@ import Dropdown from "ui-library/Dropdown";
 import ChatBubble from "./ChatBubble";
 import ChatTime from "./ChatTime";
 import { logout } from "../../store/actions/userActions";
-import { getMessages, createMessage, listenMessages } from "../../store/actions/messageActions";
+import {
+  getMessages,
+  createMessage,
+  listenMessages,
+} from "../../store/actions/messageActions";
+import { getCurrentDayFromDate } from "../../util/dateUtils";
 
 const ChatScreen = ({
   logout,
@@ -14,6 +19,7 @@ const ChatScreen = ({
   getMessages,
   selectedContact,
   createMessage,
+  listenMessages,
 }) => {
   const [showMore, setShowMore] = useState(false);
   const [isSearchActive, setSearchActive] = useState(false);
@@ -23,7 +29,7 @@ const ChatScreen = ({
   useEffect(() => {
     getMessages();
     listenMessages();
-  }, []);
+  }, [getMessages, listenMessages]);
 
   const logoutUser = () => {
     logout();
@@ -37,23 +43,36 @@ const ChatScreen = ({
     const items = [];
     const selectedMessages = messageMap.get(selectedContact.id);
 
-    if (selectedMessages)
-      selectedMessages
-        .sort((a, b) => a.timestamp < b.timestamp)
-        .forEach((item) => {
+    if (selectedMessages) {
+      let currentDay = null;
+      selectedMessages.forEach((item, index) => {
+        if (!currentDay) currentDay = item.timestamp;
+
+        items.push(
+          <React.Fragment>
+            <ChatBubble
+              key={"message" + item.id}
+              content={item.content}
+              me={item.sender.id === user.id}
+              timestamp={item.timestamp}
+              status={item.status}
+            />
+          </React.Fragment>
+        );
+
+        if (
+          getCurrentDayFromDate(item.timestamp) !==
+            getCurrentDayFromDate(currentDay) ||
+          index === selectedMessages.length - 1
+        ) {
           items.push(
-            <React.Fragment>
-              <ChatBubble
-                key={"message" + item.id}
-                content={item.content}
-                me={item.sender.id === user.id}
-                timestamp={item.timestamp}
-                status={item.status}
-              />
-              <ChatTime key={"chattime" + item.id} timestamp={item.timestamp} />
-            </React.Fragment>
+            <ChatTime key={"chattime" + item.id} timestamp={item.timestamp} />
           );
-        });
+          currentDay = item.timestamp;
+        }
+      });
+    }
+
     return items;
   };
 
@@ -118,23 +137,25 @@ const ChatScreen = ({
         </div>
       </div>
       <div className="chat__body">{getConversationBody()}</div>
-      {selectedContact.username && <div className="chat__footer">
-        <div className="chat__footer--input">
-          <div className="chat-input" style={{ margin: 0 }}>
-            <span className="ti-search"></span>
-            <input
-              className="chat-input__input"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-            />
-            <span className="ti-image"></span>
-            <span className="ti-file"></span>
+      {selectedContact.username && (
+        <div className="chat__footer">
+          <div className="chat__footer--input">
+            <div className="chat-input" style={{ margin: 0 }}>
+              <span className="ti-search"></span>
+              <input
+                className="chat-input__input"
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+              />
+              <span className="ti-image"></span>
+              <span className="ti-file"></span>
+            </div>
           </div>
+          <button className="chat__footer--send" onClick={sendMessage}>
+            Send<span className="ti-angle-double-right"></span>
+          </button>
         </div>
-        <button className="chat__footer--send" onClick={sendMessage}>
-          Send<span className="ti-angle-double-right"></span>
-        </button>
-      </div>}
+      )}
     </div>
   );
 };
@@ -152,4 +173,5 @@ export default connect(mapStateToProps, {
   logout,
   getMessages,
   createMessage,
+  listenMessages,
 })(ChatScreen);

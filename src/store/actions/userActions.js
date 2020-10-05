@@ -1,5 +1,6 @@
 import ApiRequest from "../../service/ApiRequestService";
 import LocalStorageService from "../../service/LocalStorageService";
+import { history } from '../../router/index';
 import {
   LOGIN_SUCCESS,
   LOGIN_REQUEST,
@@ -16,12 +17,10 @@ export function login(username) {
     });
     return ApiRequest.get(`${USER_PREFIX}/username/${username}`)
       .then((resp) => {
-        if (resp.status) {
-          LocalStorageService.setItem("user", JSON.stringify(resp.data));
-        }
+        LocalStorageService.setItem("user", JSON.stringify(resp));
         dispatch({
           type: LOGIN_SUCCESS,
-          payload: resp.data,
+          payload: resp,
         });
       })
       .catch(() =>
@@ -33,8 +32,13 @@ export function login(username) {
 }
 
 export function logout() {
+  history.push("/login");
   LocalStorageService.removeItem("user");
   return {
     type: LOGOUT,
   };
+}
+
+export function searchUsersByUsername(username) {
+  return ApiRequest.get(`${USER_PREFIX}?username=${username}`);
 }

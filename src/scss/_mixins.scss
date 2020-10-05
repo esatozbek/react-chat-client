@@ -53,3 +53,11 @@
     box-shadow: 0 0 0 0.2rem rgba($variant, 0.4);
   }
 }
+
+@mixin clearfix {
+  &::after {
+    content: "";
+    clear: both;
+    display: table
+  }
+}

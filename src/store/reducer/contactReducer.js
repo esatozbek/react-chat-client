@@ -2,6 +2,7 @@ import {
   RECENT_CHAT_USERS_REQUEST,
   RECENT_CHAT_USERS_SUCCESS,
   RECENT_CHAT_USERS_ERROR,
+  RECENT_CHAT_USERS_UPDATE,
   GROUPS_SUCCESS,
   GROUPS_REQUEST,
   GROUPS_ERROR,
@@ -47,6 +48,11 @@ export function contactReducer(state = defaultState, action) {
         ...state,
         recentChatUsersLoading: false,
         recentChatUsersError: true,
+      };
+      case RECENT_CHAT_USERS_UPDATE:
+      return {
+        ...state,
+        recentChatUsers: action.payload,
       };
     case GROUPS_SUCCESS:
       return {

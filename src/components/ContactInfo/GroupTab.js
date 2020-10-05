@@ -4,18 +4,18 @@ import Spinner from "ui-library/Spinner";
 import Avatar from "ui-library/Avatar";
 import { getGroups } from "../../store/actions/contactActions";
 
-const GroupListItem = (props) => {
+export const GroupListItem = ({ title, ...props }) => {
   return (
-    <li className="contacts__item">
+    <li className="contacts__item" {...props}>
       <Avatar
         src={process.env.PUBLIC_URL + "/avatar-girl.jpg"}
         size="sm"
         variant=""
-        letter="S"
+        letter={title[0].toUpperCase()}
         style={{ marginRight: ".8rem" }}
       />
       <div className="contacts__item--info">
-        <div className="info-name">{props.title}</div>
+        <div className="info-name">{title}</div>
         <div className="info-status">Some status that anyone will read</div>
       </div>
     </li>
@@ -25,7 +25,7 @@ const GroupListItem = (props) => {
 const GroupTab = ({ groups, groupsLoading, groupsError, getGroups }) => {
   useEffect(() => {
     if (groups.length === 0) getGroups();
-  }, []);
+  }, [getGroups]);
 
   const groupListItems = () => {
     const items = [];

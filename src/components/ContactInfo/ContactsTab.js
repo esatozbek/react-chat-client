@@ -26,8 +26,8 @@ const ContactsTab = ({
   getContacts,
 }) => {
   useEffect(() => {
-    if (contacts.length === 0) getContacts();
-  }, []);
+    if (contacts && contacts.length === 0) getContacts();
+  }, [getContacts]);
 
   const listContacts = () => {
     const items = [];
@@ -41,7 +41,7 @@ const ContactsTab = ({
         style={{ margin: ".8rem" }}
       />
     );
-    contacts.forEach((item) =>
+    if (contacts && contacts.length !== 0) contacts.forEach((item) =>
       items.push(<ListItem key={`contact${item.id}`} name={item.username} />)
     );
     return items;

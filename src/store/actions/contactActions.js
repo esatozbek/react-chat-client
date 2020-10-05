@@ -24,10 +24,9 @@ export function getRecentChatUsers() {
 
     return ApiRequest.get(`${USER_PREFIX}/chats`)
       .then((resp) => {
-        console.log(resp);
         dispatch({
           type: RECENT_CHAT_USERS_SUCCESS,
-          payload: resp.data,
+          payload: resp,
         });
       })
       .catch(() =>
@@ -48,7 +47,7 @@ export function getGroups() {
       .then((resp) => {
         dispatch({
           type: GROUPS_SUCCESS,
-          payload: resp.data,
+          payload: resp,
         });
       })
       .catch(() => dispatch({ type: GROUPS_ERROR }));
@@ -65,7 +64,7 @@ export function getContacts() {
       .then((resp) => {
         dispatch({
           type: CONTACTS_SUCCESS,
-          payload: resp.data,
+          payload: resp,
         });
       })
       .catch(() =>

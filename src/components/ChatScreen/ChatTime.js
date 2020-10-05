@@ -1,10 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { isToday } from "../../util/dateUtils";
 
 const ChatTime = ({ timestamp }) => {
   const formatTimestamp = () => {
     if (!timestamp) return;
-    const date = new Date(timestamp * 1000);
+    if (isToday(timestamp)) return "Today";
+    const date = new Date(timestamp);
     const formatter = new Intl.DateTimeFormat("en-GB", {
       weekday: "long",
       year: "numeric",
