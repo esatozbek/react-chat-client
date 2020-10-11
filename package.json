@@ -1,5 +1,5 @@
 {
-  "name": "graphql-chat-client",
+  "name": "react-chat-client",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
