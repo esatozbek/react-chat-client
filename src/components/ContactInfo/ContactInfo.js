@@ -71,25 +71,25 @@ const ContactInfo = ({ user, selectContact }) => {
           onFocus={() => setShowSearchUser(true)}
           onBlur={() => setShowSearchUser(false)}
         />
+        <Overlay
+          target={searchRef}
+          show={showSearchUser}
+          placement="bottom"
+          onHide={() => setShowNotifications(false)}
+          showArrow
+        >
+          <div className="contact-info__search--items">
+            {searchUserItems.map((user) => (
+              <ul key={`searchuser${user.id}`}>
+                <GroupListItem
+                  title={user.username}
+                  onClick={() => handleSelectContact(user)}
+                />
+              </ul>
+            ))}
+          </div>
+        </Overlay>
       </div>
-      <Overlay
-        target={searchRef}
-        show={showSearchUser}
-        placement="bottom"
-        onHide={() => setShowNotifications(false)}
-        showArrow
-      >
-        <div className="contact-info__search--items">
-          {searchUserItems.map((user) => (
-            <ul key={`searchuser${user.id}`}>
-              <GroupListItem
-                title={user.username}
-                onClick={() => handleSelectContact(user)}
-              />
-            </ul>
-          ))}
-        </div>
-      </Overlay>
       <Tab.Container>
         <Tab key="chat" title="Chat">
           <div style={{ padding: ".8rem", fontWeight: "200" }}>

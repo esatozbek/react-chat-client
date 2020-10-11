@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { isToday } from "../../util/dateUtils";
 
 const ChatTime = ({ timestamp }) => {
+  console.log(timestamp)
   const formatTimestamp = () => {
     if (!timestamp) return;
     if (isToday(timestamp)) return "Today";

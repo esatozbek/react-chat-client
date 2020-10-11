@@ -29,6 +29,7 @@
         transition: 0.4s ease all;
 
         &:hover {
+          color: $background-color-light;
           background-color: lighten($header-color-dark, 25);
           box-shadow: 5px 5px 27px -1px rgba($header-color-dark, 0.75);
         }

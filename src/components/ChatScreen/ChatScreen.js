@@ -4,7 +4,8 @@ import Avatar from "ui-library/Avatar";
 import Dropdown from "ui-library/Dropdown";
 import ChatBubble from "./ChatBubble";
 import ChatTime from "./ChatTime";
-import { logout } from "../../store/actions/userActions";
+import SettingsModal from '../SettingsModal';
+import { addToContacts } from "../../store/actions/contactActions";
 import {
   getMessages,
   createMessage,
@@ -13,7 +14,6 @@ import {
 import { getCurrentDayFromDate } from "../../util/dateUtils";
 
 const ChatScreen = ({
-  logout,
   messageMap,
   user,
   getMessages,
@@ -24,6 +24,7 @@ const ChatScreen = ({
   const [showMore, setShowMore] = useState(false);
   const [isSearchActive, setSearchActive] = useState(false);
   const [content, setContent] = useState("");
+  const [showSettingsModal, setSettingsModal] = useState(false);
   const showMoreRef = useRef(null);
 
   useEffect(() => {
@@ -31,13 +32,13 @@ const ChatScreen = ({
     listenMessages();
   }, [getMessages, listenMessages]);
 
-  const logoutUser = () => {
-    logout();
+  const sendMessage = () => {
+    if (content) createMessage(content, selectedContact);
   };
 
-  const sendMessage = () => {
-    createMessage(content, selectedContact);
-  };
+  const handleAddContact = () => {
+    addToContacts(user.id, selectedContact.id);
+  }
 
   const getConversationBody = () => {
     const items = [];
@@ -66,7 +67,7 @@ const ChatScreen = ({
           index === selectedMessages.length - 1
         ) {
           items.push(
-            <ChatTime key={"chattime" + item.id} timestamp={item.timestamp} />
+            <ChatTime key={"chattime" + item.id} timestamp={currentDay} />
           );
           currentDay = item.timestamp;
         }
@@ -77,6 +78,7 @@ const ChatScreen = ({
   };
 
   return (
+    <React.Fragment>
     <div className="chat">
       <div className="chat__header">
         <div className="contact-info">
@@ -108,7 +110,7 @@ const ChatScreen = ({
                 <input className="chat-input__input" placeholder="Search..." />
               </span>
             )}
-            <span className="ti-settings"></span>
+            <span className="ti-settings" onClick={() => setSettingsModal(!showSettingsModal)}></span>
             <span
               className="ti-more"
               onClick={() => setShowMore(true)}
@@ -120,17 +122,11 @@ const ChatScreen = ({
               onHide={() => setShowMore(false)}
               placement="bottom-start"
             >
-              <Dropdown.Item onClick={() => console.log("Copy")}>
-                Copy
+              <Dropdown.Item onClick={handleAddContact}>
+                Add To Contacts
               </Dropdown.Item>
               <Dropdown.Item onClick={() => console.log("Save")}>
-                Save
-              </Dropdown.Item>
-              <Dropdown.Item onClick={() => console.log("Forward")}>
-                Forward
-              </Dropdown.Item>
-              <Dropdown.Item onClick={(e) => logoutUser()}>
-                Logout
+                Add To A Group
               </Dropdown.Item>
             </Dropdown>
           </div>
@@ -157,6 +153,8 @@ const ChatScreen = ({
         </div>
       )}
     </div>
+    <SettingsModal showModal={showSettingsModal} setShowModal={setSettingsModal} />
+    </React.Fragment>
   );
 };
 
@@ -170,7 +168,6 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
-  logout,
   getMessages,
   createMessage,
   listenMessages,

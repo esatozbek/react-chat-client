@@ -88,3 +88,16 @@ export function selectGroup(group) {
     payload: group,
   };
 }
+
+export function addToContacts(userId, contactId) {
+  return ApiRequest.post(`${USER_PREFIX}/contact`, {
+    userId,
+    contactId,
+  });
+}
+
+export function listenContacts(userId) {
+  return ApiRequest.getStream(`${USER_PREFIX}/contact/stream`, (resp) => {
+    console.log(resp);
+  });
+}

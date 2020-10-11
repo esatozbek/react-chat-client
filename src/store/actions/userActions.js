@@ -1,6 +1,6 @@
 import ApiRequest from "../../service/ApiRequestService";
 import LocalStorageService from "../../service/LocalStorageService";
-import { history } from '../../router/index';
+import { history } from "../../router/index";
 import {
   LOGIN_SUCCESS,
   LOGIN_REQUEST,
@@ -41,4 +41,10 @@ export function logout() {
 
 export function searchUsersByUsername(username) {
   return ApiRequest.get(`${USER_PREFIX}?username=${username}`);
+}
+
+export function listenContacts(userId) {
+  return ApiRequest.getStream(`${USER_PREFIX}/contact/stream`, (resp) => {
+    console.log(resp);
+  });
 }

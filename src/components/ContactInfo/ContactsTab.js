@@ -3,11 +3,15 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Spinner from "ui-library/Spinner";
 import Avatar from "ui-library/Avatar";
-import { getContacts } from "../../store/actions/contactActions";
+import {
+  getContacts,
+  listenContacts,
+  selectContact,
+} from "../../store/actions/contactActions";
 
-const ListItem = ({ name }) => {
+const ListItem = ({ name, className, ...props }) => {
   return (
-    <li className="contacts__item">
+    <li className={`contacts__item ${className}`} {...props}>
       <div className="contacts__item--info">
         <div className="info-name">{name}</div>
       </div>
@@ -24,9 +28,12 @@ const ContactsTab = ({
   contactsLoading,
   contactsError,
   getContacts,
+  selectContact,
+  selectedContact
 }) => {
   useEffect(() => {
     if (contacts && contacts.length === 0) getContacts();
+    listenContacts();
   }, [getContacts]);
 
   const listContacts = () => {
@@ -37,13 +44,21 @@ const ContactsTab = ({
         src={process.env.PUBLIC_URL + "/avatar-girl.jpg"}
         size="sm"
         variant=""
-        letter="S"
+        letter="U"
         style={{ margin: ".8rem" }}
       />
     );
-    if (contacts && contacts.length !== 0) contacts.forEach((item) =>
-      items.push(<ListItem key={`contact${item.id}`} name={item.username} />)
-    );
+    if (contacts && contacts.length !== 0)
+      contacts.forEach((item) =>
+        items.push(
+          <ListItem
+            key={`contact${item.id}`}
+            name={item.username}
+            onClick={() => selectContact(item)}
+            className={item.id === selectedContact.id ? 'selected' : ''}
+          />
+        )
+      );
     return items;
   };
 
@@ -64,7 +79,10 @@ const mapStateToProps = (state) => {
     contacts: state.contactReducer.contacts,
     contactsLoading: state.contactReducer.contactsLoading,
     contactsError: state.contactReducer.contactsError,
+    selectedContact: state.contactReducer.selectedContact
   };
 };
 
-export default connect(mapStateToProps, { getContacts })(ContactsTab);
+export default connect(mapStateToProps, { getContacts, selectContact })(
+  ContactsTab
+);

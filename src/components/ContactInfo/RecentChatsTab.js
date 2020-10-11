@@ -7,9 +7,9 @@ import {
   getRecentChatUsers,
 } from "../../store/actions/contactActions";
 
-const ContactListItem = ({ ...props }) => {
+const ContactListItem = ({ className, ...props }) => {
   return (
-    <li className="contacts__item" {...props}>
+    <li className={`contacts__item ${className}`} {...props}>
       <span className="contacts__item--status"></span>
       <Avatar
         src={process.env.PUBLIC_URL + "/avatar-girl.jpg"}
@@ -32,6 +32,7 @@ const RecentChats = ({
   recentChatUsersLoading,
   getRecentChatUsers,
   selectContact,
+  selectedContact
 }) => {
   useEffect(() => {
     if (recentChatUsers.length === 0) getRecentChatUsers();
@@ -43,6 +44,7 @@ const RecentChats = ({
         key={`user${user.id}`}
         username={user.username}
         onClick={() => selectContact(user)}
+        className={user.id === selectedContact.id ? 'selected' : ''}
       />
     ));
   };
@@ -64,6 +66,7 @@ const mapStateToProps = (state) => {
     recentChatUsers: state.contactReducer.recentChatUsers,
     recentChatUsersLoading: state.contactReducer.recentChatUsersLoading,
     recentChatUsersError: state.contactReducer.recentChatUsersError,
+    selectedContact: state.contactReducer.selectedContact,
   };
 };
 
