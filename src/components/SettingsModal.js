@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import { useHistory } from 'react-router-dom';
 import Modal from "ui-library/Modal";
 import Card from "ui-library/Card";
 import Title from "ui-library/Title";
@@ -9,8 +10,10 @@ import TextInput from "ui-library/TextInput";
 import { logout } from "../store/actions/userActions";
 
 const SettingsModal = ({ showModal, setShowModal }) => {
+  const history = useHistory();
   const logoutUser = () => {
     logout();
+    history.push("/login");
   };
 
   return (

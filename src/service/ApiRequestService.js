@@ -3,6 +3,11 @@ import LocalStorageService from "./LocalStorageService";
 const API_URL = "http://localhost:8080";
 
 class ApiRequest {
+  constructor() {
+    this.controllers = [];
+    this.timeoutIds = [];
+  }
+
   prepareHeaders() {
     const headers = {};
     headers["Content-Type"] = "application/json";
@@ -44,10 +49,22 @@ class ApiRequest {
     }).then((resp) => this.handleResponse(resp));
   }
 
+  put(path, payload) {
+    return fetch(API_URL + path, {
+      method: "PUT",
+      body: JSON.stringify(payload),
+      headers: this.prepareHeaders(),
+    }).then((resp) => this.handleResponse(resp));
+  }
+
   getStream(path, callback) {
+    const controller = new AbortController();
+    const signal = controller.signal;
+    this.controllers.push(controller);
     fetch(API_URL + path, {
       method: "GET",
       headers: this.prepareHeaders(),
+      signal,
     })
       .then((resp) => {
         if (resp.status !== 200 && resp.status !== 201) {
@@ -73,11 +90,19 @@ class ApiRequest {
           }
         });
       })
-      .catch(() => {
-        setTimeout(() => {
-          this.getStream(path, callback);
-        }, 2500);
+      .catch((e) => {
+        if (e.name !== "AbortError") {
+          const timeoutId = setTimeout(() => {
+            this.getStream(path, callback);
+          }, 2500);
+          this.timeoutIds.push(timeoutId);
+        }
       });
+  }
+
+  cancelRequests() {
+    this.controllers.forEach((controller) => controller.abort());
+    this.timeoutIds.forEach((timeoutId) => clearTimeout(timeoutId));
   }
 }
 

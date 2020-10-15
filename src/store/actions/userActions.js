@@ -1,11 +1,12 @@
 import ApiRequest from "../../service/ApiRequestService";
 import LocalStorageService from "../../service/LocalStorageService";
-import { history } from "../../router/index";
+import store from "../index";
 import {
   LOGIN_SUCCESS,
   LOGIN_REQUEST,
   LOGIN_ERROR,
   LOGOUT,
+  RECENT_CHAT_USERS_UPDATE,
 } from "./actionTypes";
 
 const USER_PREFIX = "/user";
@@ -15,7 +16,10 @@ export function login(username) {
     dispatch({
       type: LOGIN_REQUEST,
     });
-    return ApiRequest.get(`${USER_PREFIX}/username/${username}`)
+    const data = {
+      username,
+    };
+    return ApiRequest.post(`${USER_PREFIX}/login`, data)
       .then((resp) => {
         LocalStorageService.setItem("user", JSON.stringify(resp));
         dispatch({
@@ -32,7 +36,8 @@ export function login(username) {
 }
 
 export function logout() {
-  history.push("/login");
+  ApiRequest.post(`${USER_PREFIX}/logout`);
+  ApiRequest.cancelRequests();
   LocalStorageService.removeItem("user");
   return {
     type: LOGOUT,
@@ -47,4 +52,23 @@ export function listenContacts(userId) {
   return ApiRequest.getStream(`${USER_PREFIX}/contact/stream`, (resp) => {
     console.log(resp);
   });
+}
+
+export function streamUsers() {
+  return (dispatch) => {
+    ApiRequest.getStream(USER_PREFIX + "/stream", (resp) => {
+      const recentChatUsers = [
+        ...store.getState().contactReducer.recentChatUsers,
+      ];
+      recentChatUsers.forEach((user, i) => {
+        if (user.id === resp.id) {
+          recentChatUsers[i] = resp;
+        }
+      });
+      dispatch({
+        type: RECENT_CHAT_USERS_UPDATE,
+        payload: recentChatUsers,
+      });
+    });
+  };
 }

@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+import { BrowserRouter, Route, Redirect } from "react-router-dom";
 import { createBrowserHistory } from "history";
 import Login from "../pages/Login";
 import ChatBox from "../pages/ChatBox";
@@ -34,21 +34,14 @@ const Router = ({ user }) => {
 
   return (
     <BrowserRouter>
-      <Switch history={history}>
-        <PrivateRoute
-          isAllowed={!isLogin()}
-          component={Login}
-          path="/login"
-          redirectTo="/"
-        />
-        <PrivateRoute
-          isAllowed={isLogin()}
-          component={ChatBox}
-          exact
-          path="/"
-          redirectTo="/login"
-        />
-      </Switch>
+      <PublicRoute isAllowed={!isLogin()} component={Login} path="/login" />
+      <PrivateRoute
+        isAllowed={isLogin()}
+        component={ChatBox}
+        exact
+        path="/"
+        redirectTo="/login"
+      />
     </BrowserRouter>
   );
 };

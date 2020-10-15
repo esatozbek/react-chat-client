@@ -41,10 +41,6 @@ const ContactInfo = ({ user, selectContact }) => {
         />
         <div className="contact-info__info">
           <div>{user.username}</div>
-          <div className="contact-info__info--status">
-            <span className="contacts__item--status"></span>
-            <span>Online</span>
-          </div>
         </div>
         <span
           className="ti-bell"

@@ -49,7 +49,7 @@ export function contactReducer(state = defaultState, action) {
         recentChatUsersLoading: false,
         recentChatUsersError: true,
       };
-      case RECENT_CHAT_USERS_UPDATE:
+    case RECENT_CHAT_USERS_UPDATE:
       return {
         ...state,
         recentChatUsers: action.payload,

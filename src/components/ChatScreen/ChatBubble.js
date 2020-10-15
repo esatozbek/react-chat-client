@@ -9,7 +9,13 @@ const ChatBubble = ({ content, status, timestamp, me, ...props }) => {
   const formatTimestamp = () => {
     if (!timestamp) return;
     const date = new Date(timestamp);
-    const hrMnt = date.getHours() + ":" + date.getMinutes();
+    const formatter = new Intl.DateTimeFormat("en-GB", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+    const hrMnt = date.getHours() + ":" + date.getMinutes() + formatter.format(date);
     return hrMnt;
   };
 
@@ -35,8 +41,6 @@ const ChatBubble = ({ content, status, timestamp, me, ...props }) => {
         onHide={() => setShowMore(false)}
         placement={me ? "left-start" : "right-start"}
       >
-        <Dropdown.Item onClick={() => console.log("Copy")}>Copy</Dropdown.Item>
-        <Dropdown.Item onClick={() => console.log("Save")}>Save</Dropdown.Item>
         <Dropdown.Item onClick={() => console.log("Forward")}>
           Forward
         </Dropdown.Item>

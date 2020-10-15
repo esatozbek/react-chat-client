@@ -7,7 +7,7 @@ export function isToday(timestamp) {
   const date = new Date(timestamp);
   const today = new Date();
   return (
-    date.getDay() === today.getDay() &&
+    date.getDate() === today.getDate() &&
     date.getMonth() === today.getMonth() &&
     date.getFullYear() === today.getFullYear()
   );
