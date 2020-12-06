@@ -19,42 +19,39 @@ class ApiRequest {
     return headers;
   }
 
-  handleResponse(resp) {
+  async handleResponse(resp, resolve, reject) {
     if (resp.status !== 200 && resp.status !== 201) {
-      throw new Error("Request error");
+      reject(await resp.json());
+    } else {
+      resolve(await resp.json());
     }
-    return resp.json();
+  }
+
+  async request(path, method, body) {
+    return new Promise(async (resolve, reject) => {
+      const resp = await fetch(API_URL + path, {
+        method,
+        ...(body && { body: JSON.stringify(body) }),
+        headers: this.prepareHeaders(),
+      });
+      this.handleResponse(resp, resolve, reject);
+    });
   }
 
   get(path) {
-    return fetch(API_URL + path, {
-      method: "GET",
-      headers: this.prepareHeaders(),
-    }).then((resp) => this.handleResponse(resp));
+    return this.request(path, "GET");
   }
 
   patch(path, payload) {
-    return fetch(API_URL + path, {
-      method: "PATCH",
-      body: JSON.stringify(payload),
-      headers: this.prepareHeaders(),
-    }).then((resp) => resp.json());
+    return this.request(path, "PATCH", payload);
   }
 
   post(path, payload) {
-    return fetch(API_URL + path, {
-      method: "POST",
-      body: JSON.stringify(payload),
-      headers: this.prepareHeaders(),
-    }).then((resp) => this.handleResponse(resp));
+    return this.request(path, "POST", payload);
   }
 
   put(path, payload) {
-    return fetch(API_URL + path, {
-      method: "PUT",
-      body: JSON.stringify(payload),
-      headers: this.prepareHeaders(),
-    }).then((resp) => this.handleResponse(resp));
+    return this.request(path, "PUT", payload);
   }
 
   getStream(path, callback) {

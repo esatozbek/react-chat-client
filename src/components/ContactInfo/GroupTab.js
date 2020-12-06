@@ -25,7 +25,7 @@ export const GroupListItem = ({ title, ...props }) => {
 const GroupTab = ({ groups, groupsLoading, groupsError, getGroups }) => {
   useEffect(() => {
     if (groups.length === 0) getGroups();
-  }, [getGroups]);
+  }, [groups.length, getGroups]);
 
   const groupListItems = () => {
     const items = [];

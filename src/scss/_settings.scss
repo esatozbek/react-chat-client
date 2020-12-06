@@ -1,0 +1,15 @@
+.settings {
+  &__container {
+    width: 100%;
+    border: 1px solid beige;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+
+    span {
+      flex-grow: 1;
+    }
+  }
+}

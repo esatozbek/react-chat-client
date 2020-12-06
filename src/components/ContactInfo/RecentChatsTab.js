@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Spinner from "ui-library/Spinner";
-import Avatar from "ui-library/Avatar";
 import {
   selectContact,
   getRecentChatUsers,
@@ -15,17 +14,10 @@ const ContactListItem = ({ className, user, ...props }) => {
   return (
     <li className={`contacts__item ${className}`} {...props}>
       <span className={`contacts__item--status ${status}`}></span>
-      <Avatar
-        src={process.env.PUBLIC_URL + "/avatar-girl.jpg"}
-        size="sm"
-        variant=""
-        style={{ marginRight: ".8rem" }}
-      />
       <div className="contacts__item--info">
         <div className="info-name">{user.username}</div>
-        <div className="info-status">Some status that anyone will read</div>
       </div>
-      <div className="contacts__item--status">3</div>
+      <div className="contacts__item--messages">3</div>
     </li>
   );
 };
@@ -46,9 +38,10 @@ const RecentChats = ({
   useEffect(() => {
     if (recentChatUsers.length === 0) getRecentChatUsers();
     streamUsers();
-  }, []);
+  }, [getRecentChatUsers, recentChatUsers, streamUsers]);
 
   const getRecentChats = () => {
+    console.log(recentChatUsers);
     return recentChatUsers.map((user) => (
       <ContactListItem
         key={`user${user.id}`}

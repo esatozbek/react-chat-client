@@ -2,8 +2,6 @@ import React, { useState, useRef, useEffect } from "react";
 import { connect } from "react-redux";
 import Avatar from "ui-library/Avatar";
 import Dropdown from "ui-library/Dropdown";
-import ChatBubble from "./ChatBubble";
-import ChatTime from "./ChatTime";
 import SettingsModal from "../SettingsModal";
 import { addToContacts } from "../../store/actions/contactActions";
 import {
@@ -11,7 +9,7 @@ import {
   createMessage,
   listenMessages,
 } from "../../store/actions/messageActions";
-import { getCurrentDayFromDate } from "../../util/dateUtils";
+import useConversationBody from "../../hooks/useConversationBody";
 import ApiRequestService from "../../service/ApiRequestService";
 
 const ChatScreen = ({
@@ -27,6 +25,11 @@ const ChatScreen = ({
   const [content, setContent] = useState("");
   const [showSettingsModal, setSettingsModal] = useState(false);
   const showMoreRef = useRef(null);
+  const getConversationBody = useConversationBody(
+    user,
+    messageMap,
+    selectedContact
+  );
 
   useEffect(() => {
     getMessages();
@@ -34,7 +37,7 @@ const ChatScreen = ({
 
     return () => {
       ApiRequestService.cancelRequests();
-    }
+    };
   }, [getMessages, listenMessages]);
 
   const sendMessage = () => {
@@ -43,48 +46,6 @@ const ChatScreen = ({
 
   const handleAddContact = () => {
     addToContacts(user.id, selectedContact.id);
-  };
-
-  const getConversationBody = () => {
-    const items = [];
-    const selectedMessages = messageMap.get(selectedContact.id);
-
-    if (selectedMessages) {
-      let currentDay = null;
-      selectedMessages.forEach((item, index) => {
-        if (!currentDay) currentDay = item.timestamp;
-
-        if (
-          getCurrentDayFromDate(item.timestamp) !==
-          getCurrentDayFromDate(currentDay)
-        ) {
-          items.push(
-            <ChatTime key={"chattime" + item.id} timestamp={currentDay} />
-          );
-          currentDay = item.timestamp;
-        }
-
-        items.push(
-          <React.Fragment>
-            <ChatBubble
-              key={"message" + item.id}
-              content={item.content}
-              me={item.sender.id === user.id}
-              timestamp={item.timestamp}
-              status={item.status}
-            />
-          </React.Fragment>
-        );
-
-        if (index === selectedMessages.length - 1) {
-          items.push(
-            <ChatTime key={"chattime" + item.id} timestamp={currentDay} />
-          );
-        }
-      });
-    }
-
-    return items;
   };
 
   return (

@@ -4,7 +4,6 @@ import store from "../index";
 import {
   LOGIN_SUCCESS,
   LOGIN_REQUEST,
-  LOGIN_ERROR,
   LOGOUT,
   RECENT_CHAT_USERS_UPDATE,
 } from "./actionTypes";
@@ -19,19 +18,13 @@ export function login(username) {
     const data = {
       username,
     };
-    return ApiRequest.post(`${USER_PREFIX}/login`, data)
-      .then((resp) => {
-        LocalStorageService.setItem("user", JSON.stringify(resp));
-        dispatch({
-          type: LOGIN_SUCCESS,
-          payload: resp,
-        });
-      })
-      .catch(() =>
-        dispatch({
-          type: LOGIN_ERROR,
-        })
-      );
+    return ApiRequest.post(`${USER_PREFIX}/login`, data).then((resp) => {
+      LocalStorageService.setItem("user", JSON.stringify(resp));
+      dispatch({
+        type: LOGIN_SUCCESS,
+        payload: resp,
+      });
+    });
   };
 }
 

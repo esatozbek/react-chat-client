@@ -69,20 +69,24 @@ const ContactInfo = ({ user, selectContact }) => {
         />
         <Overlay
           target={searchRef}
-          show={showSearchUser}
+          show={showSearchUser && searchUserInput.length > 2}
           placement="bottom"
           onHide={() => setShowNotifications(false)}
           showArrow
         >
           <div className="contact-info__search--items">
-            {searchUserItems.map((user) => (
-              <ul key={`searchuser${user.id}`}>
-                <GroupListItem
-                  title={user.username}
-                  onClick={() => handleSelectContact(user)}
-                />
-              </ul>
-            ))}
+            {searchUserItems.length > 0 ? (
+              searchUserItems.map((user) => (
+                <ul key={`searchuser${user.id}`}>
+                  <GroupListItem
+                    title={user.username}
+                    onClick={() => handleSelectContact(user)}
+                  />
+                </ul>
+              ))
+            ) : (
+              <div className="info">No users found</div>
+            )}
           </div>
         </Overlay>
       </div>

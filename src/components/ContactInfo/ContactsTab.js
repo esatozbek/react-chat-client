@@ -29,12 +29,12 @@ const ContactsTab = ({
   contactsError,
   getContacts,
   selectContact,
-  selectedContact
+  selectedContact,
 }) => {
   useEffect(() => {
     if (contacts && contacts.length === 0) getContacts();
     listenContacts();
-  }, [getContacts]);
+  }, [getContacts, contacts]);
 
   const listContacts = () => {
     const items = [];
@@ -55,7 +55,7 @@ const ContactsTab = ({
             key={`contact${item.id}`}
             name={item.username}
             onClick={() => selectContact(item)}
-            className={item.id === selectedContact.id ? 'selected' : ''}
+            className={item.id === selectedContact.id ? "selected" : ""}
           />
         )
       );
@@ -79,7 +79,7 @@ const mapStateToProps = (state) => {
     contacts: state.contactReducer.contacts,
     contactsLoading: state.contactReducer.contactsLoading,
     contactsError: state.contactReducer.contactsError,
-    selectedContact: state.contactReducer.selectedContact
+    selectedContact: state.contactReducer.selectedContact,
   };
 };
 

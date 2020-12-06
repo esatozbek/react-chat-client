@@ -10,14 +10,20 @@ const Login = ({ login, test }) => {
   const history = useHistory();
   const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const loginUser = () => {
     setLoading(true);
 
-    login(username).then((resp) => {
-      setLoading(false);
-      history.push("/");
-    });
+    login(username)
+      .then((resp) => {
+        setLoading(false);
+        history.push("/");
+      })
+      .catch((err) => {
+        setLoading(false);
+        setError(err.message);
+      });
   };
 
   return (
@@ -42,6 +48,7 @@ const Login = ({ login, test }) => {
         >
           Login
         </LoadingButton>
+        {error && <div className="login__error">{error}</div>}
       </div>
     </div>
   );

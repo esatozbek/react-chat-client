@@ -6,6 +6,7 @@ import {
   GET_MESSAGE_ERROR,
   CREATE_MESSAGE_REQUEST,
   RECENT_CHAT_USERS_UPDATE,
+  RECENT_CHAT_USERS_SUCCESS,
 } from "./actionTypes";
 
 const MESSAGE_PREFIX = "/message";

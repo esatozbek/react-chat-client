@@ -35,13 +35,21 @@
 
   &__search {
     &--items {
-      height: 30rem;
+      min-height: 5rem;
+      max-height: 30rem;
       width: 30rem;
       background-color: $background-color;
       border-radius: 3px;
       box-shadow: rgba(0, 0, 0, 0.75) 7px 7px 10px 0px;
       overflow-y: scroll;
       cursor: pointer;
+
+      .info {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 5rem;
+      }
     }
   }
 }
