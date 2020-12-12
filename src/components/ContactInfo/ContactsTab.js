@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Spinner from "ui-library/Spinner";
-import Avatar from "ui-library/Avatar";
 import {
   getContacts,
   listenContacts,
@@ -32,22 +31,13 @@ const ContactsTab = ({
   selectedContact,
 }) => {
   useEffect(() => {
-    if (contacts && contacts.length === 0) getContacts();
+    getContacts();
     listenContacts();
-  }, [getContacts, contacts]);
+  }, []);
 
   const listContacts = () => {
     const items = [];
-    items.push(
-      <Avatar
-        key="avatar2"
-        src={process.env.PUBLIC_URL + "/avatar-girl.jpg"}
-        size="sm"
-        variant=""
-        letter="U"
-        style={{ margin: ".8rem" }}
-      />
-    );
+
     if (contacts && contacts.length !== 0)
       contacts.forEach((item) =>
         items.push(

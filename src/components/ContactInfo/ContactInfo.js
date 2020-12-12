@@ -2,9 +2,8 @@ import React, { useState, useRef } from "react";
 import { connect } from "react-redux";
 import Tab from "ui-library/Tab";
 import Overlay from "ui-library/Overlay";
-import Avatar from "ui-library/Avatar";
 import RecentChatsTab from "./RecentChatsTab";
-import GroupTab from "./GroupTab";
+// import GroupTab from "./GroupTab";
 import ContactsTab from "./ContactsTab";
 import ChatNotifications from "../ChatNotifications";
 import { searchUsersByUsername } from "../../store/actions/userActions";
@@ -34,11 +33,6 @@ const ContactInfo = ({ user, selectContact }) => {
   return (
     <React.Fragment>
       <div className="contact-info">
-        <Avatar
-          src={process.env.PUBLIC_URL + "/avatar-girl.jpg"}
-          size="sm"
-          variant=""
-        />
         <div className="contact-info__info">
           <div>{user.username}</div>
         </div>
@@ -99,12 +93,12 @@ const ContactInfo = ({ user, selectContact }) => {
             <RecentChatsTab />
           </ul>
         </Tab>
-        <Tab key="group" title="Group">
+        {/* <Tab key="group" title="Group">
           <div style={{ padding: ".8rem", fontWeight: "200" }}>Groups</div>
           <ul className="contacts">
             <GroupTab />
           </ul>
-        </Tab>
+        </Tab> */}
         <Tab key="contacts" title="Contacts">
           <div style={{ padding: ".8rem", fontWeight: "200" }}>Contacts</div>
           <ul className="contacts">

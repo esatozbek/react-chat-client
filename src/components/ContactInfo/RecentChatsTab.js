@@ -17,7 +17,9 @@ const ContactListItem = ({ className, user, ...props }) => {
       <div className="contacts__item--info">
         <div className="info-name">{user.username}</div>
       </div>
-      <div className="contacts__item--messages">3</div>
+      {user.newMessages && (
+        <div className="contacts__item--messages">{user.newMessages}</div>
+      )}
     </li>
   );
 };
@@ -36,12 +38,11 @@ const RecentChats = ({
   streamUsers,
 }) => {
   useEffect(() => {
-    if (recentChatUsers.length === 0) getRecentChatUsers();
+    getRecentChatUsers();
     streamUsers();
-  }, [getRecentChatUsers, recentChatUsers, streamUsers]);
+  }, [getRecentChatUsers, streamUsers]);
 
   const getRecentChats = () => {
-    console.log(recentChatUsers);
     return recentChatUsers.map((user) => (
       <ContactListItem
         key={`user${user.id}`}

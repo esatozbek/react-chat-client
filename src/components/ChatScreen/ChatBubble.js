@@ -9,13 +9,7 @@ const ChatBubble = ({ content, status, timestamp, me, ...props }) => {
   const formatTimestamp = () => {
     if (!timestamp) return;
     const date = new Date(timestamp);
-    const formatter = new Intl.DateTimeFormat("en-GB", {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-    const hrMnt = date.getHours() + ":" + date.getMinutes() + formatter.format(date);
+    const hrMnt = date.getHours() + ":" + date.getMinutes();
     return hrMnt;
   };
 

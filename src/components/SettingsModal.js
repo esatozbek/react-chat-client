@@ -5,7 +5,6 @@ import Modal from "ui-library/Modal";
 import Card from "ui-library/Card";
 import Title from "ui-library/Title";
 import Button from "ui-library/Button";
-import Switch from "ui-library/Switch";
 import { logout } from "../store/actions/userActions";
 
 const SettingsModal = ({ showModal, setShowModal }) => {
@@ -21,12 +20,7 @@ const SettingsModal = ({ showModal, setShowModal }) => {
         <Card.Header>
           <Title title="Settings" />
         </Card.Header>
-        <Card.Body>
-          <div className="settings__item">
-            <span>Dark Mode:</span>
-            <Switch />
-          </div>
-        </Card.Body>
+        <Card.Body></Card.Body>
         <Card.Footer>
           <Button variant="danger" className="pull-right" onClick={logoutUser}>
             Logout

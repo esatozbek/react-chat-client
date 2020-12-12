@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import { connect } from "react-redux";
-import Avatar from "ui-library/Avatar";
 import Dropdown from "ui-library/Dropdown";
 import SettingsModal from "../SettingsModal";
 import { addToContacts } from "../../store/actions/contactActions";
@@ -53,13 +52,6 @@ const ChatScreen = ({
       <div className="chat">
         <div className="chat__header">
           <div className="contact-info">
-            {selectedContact.username && (
-              <Avatar
-                src={process.env.PUBLIC_URL + "/avatar-girl.jpg"}
-                size="sm"
-                variant=""
-              />
-            )}
             <div className="contact-info__info">
               <div className="contact-info__info--name">
                 {selectedContact.username}
@@ -67,7 +59,6 @@ const ChatScreen = ({
               {selectedContact.username && (
                 <div className="contact-info__info--status">
                   <span className="contacts__item--status"></span>
-                  <span>Online</span>
                 </div>
               )}
             </div>
@@ -101,9 +92,6 @@ const ChatScreen = ({
               >
                 <Dropdown.Item onClick={handleAddContact}>
                   Add To Contacts
-                </Dropdown.Item>
-                <Dropdown.Item onClick={() => console.log("Save")}>
-                  Add To A Group
                 </Dropdown.Item>
               </Dropdown>
             </div>

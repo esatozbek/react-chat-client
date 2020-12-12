@@ -6,7 +6,6 @@ import {
   GET_MESSAGE_ERROR,
   CREATE_MESSAGE_REQUEST,
   RECENT_CHAT_USERS_UPDATE,
-  RECENT_CHAT_USERS_SUCCESS,
 } from "./actionTypes";
 
 const MESSAGE_PREFIX = "/message";
@@ -49,7 +48,24 @@ export function getMessages() {
   };
 }
 
-export function createMessage(content, receiver, group) {
+function reorderRecentChats(dispatch, message) {
+  let recentChats = [...store.getState().contactReducer.recentChatUsers];
+  const messageUserId = recentChats.findIndex(
+    (user) => user.id === message.receiverId
+  );
+  if (messageUserId !== -1) {
+    const chat = recentChats[messageUserId];
+    recentChats.splice(messageUserId, 1);
+    recentChats = [chat, ...recentChats];
+
+    dispatch({
+      type: RECENT_CHAT_USERS_UPDATE,
+      payload: recentChats,
+    });
+  }
+}
+
+export function createMessage(content, receiver) {
   const user = store.getState().userReducer.user;
   const oppositeId = receiver.id;
   const timestamp = Math.floor(Date.now());
@@ -95,6 +111,7 @@ export function createMessage(content, receiver, group) {
       .then((resp) => {
         message.id = resp.id;
         message.status = "SENT";
+        reorderRecentChats(dispatch, messageRequest);
         dispatch({
           type: CREATE_MESSAGE_REQUEST,
           payload: new Map(messageMap),
@@ -104,28 +121,47 @@ export function createMessage(content, receiver, group) {
   };
 }
 
+function handleMessageSender(dispatch, resp) {
+  let recentChatsUsers = [...store.getState().contactReducer.recentChatUsers];
+  const recentUserIndex = recentChatsUsers.findIndex(
+    (user) => user.id === resp.sender.id
+  );
+  if (recentUserIndex !== -1) {
+    const recentUser = recentChatsUsers[recentUserIndex];
+    recentChatsUsers.splice(recentUserIndex, 1);
+    if (!recentUser.newMessages) {
+      recentUser.newMessages = 1;
+    } else {
+      recentUser.newMessages++;
+    }
+    recentChatsUsers = [recentUser, ...recentChatsUsers];
+  } else {
+    resp.sender.newMessages = 1;
+    recentChatsUsers = [resp.sender, ...recentChatsUsers];
+  }
+
+  dispatch({
+    type: RECENT_CHAT_USERS_UPDATE,
+    payload: recentChatsUsers,
+  });
+}
+
 export function listenMessages() {
   return (dispatch) => {
     ApiRequest.getStream(MESSAGE_PREFIX + "/stream", (resp) => {
       const messageMap = new Map(store.getState().messageReducer.messageMap);
       if (messageMap) {
+        handleMessageSender(dispatch, resp);
+
         if (messageMap.get(resp.sender.id)) {
           const oppositeMessages = messageMap.get(resp.sender.id);
           const newMessages = [resp, ...oppositeMessages];
           messageMap.set(resp.sender.id, newMessages);
-
           dispatch({
             type: CREATE_MESSAGE_REQUEST,
             payload: messageMap,
           });
         } else {
-          const recentChatsUsers = store.getState().contactReducer
-            .recentChatUsers;
-          const newRecentChatUsers = recentChatsUsers.concat(resp.sender);
-          dispatch({
-            type: RECENT_CHAT_USERS_UPDATE,
-            payload: newRecentChatUsers,
-          });
           messageMap.set(resp.sender.id, [resp]);
           dispatch({
             type: CREATE_MESSAGE_REQUEST,
@@ -133,7 +169,6 @@ export function listenMessages() {
           });
         }
       }
-      console.log(resp);
     });
   };
 }

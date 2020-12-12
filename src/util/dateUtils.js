@@ -1,6 +1,18 @@
+const formatter = new Intl.DateTimeFormat("en-GB", {
+  weekday: "long",
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+
+export function formatDate(date) {
+  return formatter.format(date);
+}
+
 export function getCurrentDayFromDate(timestamp) {
   const date = new Date(timestamp);
-  return date.getDay() + "/" + date.getMonth() + "/" + date.getFullYear();
+
+  return date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear();
 }
 
 export function isToday(timestamp) {

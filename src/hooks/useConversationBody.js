@@ -4,6 +4,10 @@ import ChatBubble from "../components/ChatScreen/ChatBubble";
 import ChatTime from "../components/ChatScreen/ChatTime";
 
 const useConversationBody = (user, messageMap, selectedContact) => {
+  const isSameDay = (d1, d2) => {
+    return getCurrentDayFromDate(d1) === getCurrentDayFromDate(d2);
+  };
+
   const getConversationBody = useCallback(() => {
     const items = [];
     const selectedMessages = messageMap.get(selectedContact.id);
@@ -13,10 +17,7 @@ const useConversationBody = (user, messageMap, selectedContact) => {
       selectedMessages.forEach((item, index) => {
         if (!currentDay) currentDay = item.timestamp;
 
-        if (
-          getCurrentDayFromDate(item.timestamp) !==
-          getCurrentDayFromDate(currentDay)
-        ) {
+        if (!isSameDay(item.timestamp, currentDay)) {
           items.push(
             <ChatTime key={"chattime" + item.id} timestamp={currentDay} />
           );
